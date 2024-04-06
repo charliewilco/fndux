@@ -1,12 +1,18 @@
 import "./App.css";
 import { CountStore, double, mutator } from "./Count";
 
+// setInterval(() => {
+// 	const { increment } = CountStore.getBoundActions();
+
+// 	increment();
+// }, 3000);
+
 function CounterActions() {
 	const safeMutate = CountStore.useSafeMutate();
 	const { increment, decrement, pi } = CountStore.useAction();
 
 	return (
-		<div>
+		<div className="buttons">
 			<button type="button" onClick={increment}>
 				Increment
 			</button>
@@ -29,7 +35,10 @@ function CountDisplay() {
 
 	return (
 		<div>
-			count is {count} * 2 = {doubled}
+			<h1>count is {count}</h1>
+			<h2>
+				{count} * 2 = <span data-testid="doubled">{doubled}</span>
+			</h2>
 		</div>
 	);
 }

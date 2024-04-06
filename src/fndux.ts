@@ -1,4 +1,9 @@
-import { useCallback, useMemo, useSyncExternalStore } from "react";
+import {
+	useCallback,
+	useDebugValue,
+	useMemo,
+	useSyncExternalStore,
+} from "react";
 
 // biome-ignore lint/suspicious/noConfusingVoidType: I want this to return type of void or T
 export function mutate<T>(value: T, mutator: (draft: T) => void | T): T {
@@ -139,6 +144,7 @@ export function fnDuxStore<TState, TActions>(
 	}
 
 	function useReadState(): TState {
+		useDebugValue(state);
 		return useSyncExternalStore(subscribe, getState, () => initialState);
 	}
 

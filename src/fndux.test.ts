@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { test, expect, describe, vi, beforeEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
+import { act } from "react";
 import { fnDuxStore, mutate } from "./fndux";
 
 import { CountStore as Count, double } from "./Count";
