@@ -18,7 +18,7 @@ export default defineConfig({
 				branches: 90,
 				functions: 90,
 			},
-			exclude: ["src/main.tsx"],
+			exclude: ["src/main.tsx", "src/*.d.ts"],
 		},
 	},
 });

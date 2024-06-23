@@ -2,7 +2,7 @@
 import { test, expect, describe, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { act } from "react";
-import { fnDuxStore, mutate } from "./fndux";
+import { createFnDuxStore, mutate } from "./fndux";
 
 import { CountStore as Count, double } from "./Count";
 
@@ -58,7 +58,7 @@ describe("Fundux", () => {
 		});
 
 		test("useAction", () => {
-			const { result } = renderHook(() => Count.useAction());
+			const { result } = renderHook(() => Count.useBound());
 			const actions = result.current;
 
 			act(() => {
@@ -104,7 +104,7 @@ describe("Fundux", () => {
 	});
 
 	describe("internals", () => {
-		const _store = fnDuxStore({ count: 0 }, (set) => ({
+		const _store = createFnDuxStore({ count: 0 }, (set) => ({
 			increment: () => {
 				set((draft) => {
 					return {

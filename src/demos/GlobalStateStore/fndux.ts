@@ -18,7 +18,7 @@ export function mutate<T>(value: T, mutator: (draft: T) => void | T): T {
 type Setter<T> = (state: T) => T | Partial<T>;
 
 export type CreateStoreActions<TState, TActions> = (
-	set: (setter: Setter<TState>) => void
+	set: (setter: Setter<TState>) => void,
 ) => TActions;
 
 interface FnHooks<TState, TActions> {
@@ -26,7 +26,7 @@ interface FnHooks<TState, TActions> {
 	 * Hook to get bound action handlers for use in components
 	 * @returns TActions
 	 */
-	useAction: () => TActions;
+	useBound: () => TActions;
 	/**
 	 * Hook to compute or select a subsection of state
 	 * @param selector create subsection of state or computed value.
@@ -78,6 +78,8 @@ interface FnStoreUnstable<TState, TActions> {
 
 type FnDux<S, A> = FnHooks<S, A> & FnExternals<S> & FnStoreUnstable<S, A>;
 
+type Listener<T> = (value: T) => void;
+
 // TODO: Strict equality checks in notifications
 // TODO: Type checking around setter function. A handler should be able to return Partial<T> or T
 /**
@@ -88,15 +90,15 @@ type FnDux<S, A> = FnHooks<S, A> & FnExternals<S> & FnStoreUnstable<S, A>;
  * @param options
  * @returns `Fundux<TState, TActions>`
  */
-export function fnDuxStore<TState, TActions>(
+export function createFnDuxStore<TState, TActions>(
 	initialState: TState,
-	actions: CreateStoreActions<TState, TActions>
+	actions: CreateStoreActions<TState, TActions>,
 ): FnDux<TState, TActions> {
 	let state: TState = Object.assign({}, initialState);
 
-	const listeners = new Set<(value: TState) => void>();
+	const listeners = new Set<Listener<TState>>();
 
-	function subscribe(listener: (value: TState) => void): () => void {
+	function subscribe(listener: Listener<TState>): () => void {
 		listeners.add(listener);
 
 		return () => {
@@ -139,7 +141,7 @@ export function fnDuxStore<TState, TActions>(
 		}, []);
 	}
 
-	function useAction(): TActions {
+	function useBound(): TActions {
 		return useMemo(() => actions(set), [actions]);
 	}
 
@@ -156,12 +158,12 @@ export function fnDuxStore<TState, TActions>(
 
 	function useStore(): Readonly<[TState, TActions]> {
 		const state = useReadState();
-		const actions = useAction();
+		const actions = useBound();
 		return [state, actions];
 	}
 
 	return {
-		useAction,
+		useBound,
 		useComputed,
 		useReadState,
 		useSafeMutate,

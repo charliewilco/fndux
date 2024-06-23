@@ -1,15 +1,24 @@
 import "./App.css";
 import { CountStore, double, mutator } from "./Count";
 
-// setInterval(() => {
-// 	const { increment } = CountStore.getBoundActions();
+function enableInterval(init = false) {
+	let interval: number;
+	if (init) {
+		interval = setInterval(() => {
+			const { increment } = CountStore.getBoundActions();
 
-// 	increment();
-// }, 3000);
+			increment();
+		}, 3000);
+	}
+
+	return function stop() {
+		if (interval) clearInterval(interval);
+	};
+}
 
 function CounterActions() {
 	const safeMutate = CountStore.useSafeMutate();
-	const { increment, decrement, pi } = CountStore.useAction();
+	const { increment, decrement, pi } = CountStore.useBound();
 
 	return (
 		<div className="buttons">
@@ -25,6 +34,9 @@ function CounterActions() {
 			<button type="button" onClick={() => safeMutate(mutator)}>
 				Mutate
 			</button>
+			<button type="button" onClick={stop}>
+				Stop
+			</button>
 		</div>
 	);
 }
@@ -35,7 +47,7 @@ function CountDisplay() {
 
 	return (
 		<div>
-			<h1>count is {count}</h1>
+			<h1 className="title">count is {count}</h1>
 			<h2>
 				{count} * 2 = <span data-testid="doubled">{doubled}</span>
 			</h2>
@@ -43,13 +55,15 @@ function CountDisplay() {
 	);
 }
 
-function App() {
+enableInterval(true);
+
+function GlobalStateStoreDemo() {
 	return (
-		<div className="card">
+		<div className="Counter">
 			<CountDisplay />
 			<CounterActions />
 		</div>
 	);
 }
 
-export default App;
+export default GlobalStateStoreDemo;

@@ -1,12 +1,12 @@
 // @vitest-environment happy-dom
-import App from "./App";
+import GlobalStateStoreDemo from "./GlobalStateStore";
 import { test, expect } from "vitest";
 import { act } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 
 test("renders counter app", () => {
-	render(<App />);
+	render(<GlobalStateStoreDemo />);
 	const button = screen.getByText(/Mutate/i);
 	const count = screen.getByText(/count is 0/i);
 	expect(button).toBeInTheDocument();
@@ -14,7 +14,7 @@ test("renders counter app", () => {
 });
 
 test("mutates count", async () => {
-	render(<App />);
+	render(<GlobalStateStoreDemo />);
 	const button = screen.getByText(/Mutate/i);
 	const count = screen.getByText(/count is 0/i);
 	const double = screen.getByTestId(/double/i);

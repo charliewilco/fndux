@@ -1,0 +1,17 @@
+.title {
+	margin-bottom: 0.5rem;
+}
+
+
+
+.buttons {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+}
+
+
+.Counter {
+	max-width: 48rem;
+	margin: 0 auto;
+}

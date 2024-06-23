@@ -12,8 +12,11 @@
 		"format": "biome format --write ./src"
 	},
 	"dependencies": {
+		"comlink": "^4.4.1",
 		"react": "canary",
-		"react-dom": "canary"
+		"react-dom": "canary",
+		"react-router-dom": "^6.22.3",
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.4",
